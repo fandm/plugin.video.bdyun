@@ -21,7 +21,7 @@ class VcodeWindow(xbmcgui.WindowDialog):
             100, 330, 220, 50, label=u'Ввести код', alignment=6, font='font13', textColor='0xFFFFFFFF'
         )
         self.buttonRefresh = xbmcgui.ControlButton(
-            290, 330, 220, 50, label=u'Обновить код', alignment=6, font='font13', textColor='0xFFFFFFFF'
+            290, 330, 220, 50, label=u'Обновить', alignment=6, font='font13', textColor='0xFFFFFFFF'
         )
         self.addControls([self.image, self.buttonInput, self.buttonRefresh])
         self.buttonInput.controlRight(self.buttonRefresh)
@@ -38,6 +38,7 @@ class VcodeWindow(xbmcgui.WindowDialog):
                 self.removeControl(self.image)
                 self.image = xbmcgui.ControlImage(80, 100, 500, 200, self.vcode_path)
                 self.addControl(self.image)
+                dialog.ok('Error', self.codeString)
             else:
                 dialog.ok('Error', u'Не удалось обновить код, повторите попытку')
 
