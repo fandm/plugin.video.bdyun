@@ -22,7 +22,7 @@ def main_menu():
     user_info = get_user_info()
     if user_info is None:
         items = [{
-        'label': u'Войти',
+        'label': u'登入',
         'path': plugin.url_for('login_dialog'),
         'is_playable': False
         }]
