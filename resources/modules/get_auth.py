@@ -38,7 +38,6 @@ class VcodeWindow(xbmcgui.WindowDialog):
                 self.removeControl(self.image)
                 self.image = xbmcgui.ControlImage(80, 100, 500, 200, self.vcode_path)
                 self.addControl(self.image)
-                dialog.ok('Error', self.codeString)
             else:
                 dialog.ok('Error', u'Не удалось обновить код, повторите попытку')
 
@@ -67,6 +66,7 @@ def run(username,password):
         dialog.ok('Error', codeString)
 
         verifycode = dialog.input(heading=u'Код')
+        dialog.ok('Error', verifycode)
         if verifycode:
             err_no,query = auth.post_login(cookie,tokens,username,password_enc,rsakey,verifycode,codeString)
             if err_no == 0:
