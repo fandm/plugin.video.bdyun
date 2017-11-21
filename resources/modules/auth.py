@@ -20,7 +20,7 @@ PASSPORT_BASE = 'https://passport.baidu.com/'
 PASSPORT_URL = PASSPORT_BASE + 'v2/api/'
 ACCEPT_HTML = 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
 REFERER = PASSPORT_BASE + 'v2/?login'
-PASSPORT_LOGIN = PASSPORT_BASE + 'v2/api/?login'
+PASSPORT_LOGIN = PASSPORT_BASE + 'v2' #/api/?login
 USER_AGENT = 'Mozilla/5.0 (X11; Linux x86_64; rv:46.0) Gecko/20100101 Firefox/46.0'
 PAN_REFERER = 'http://pan.baidu.com/disk/home'
 ACCEPT_JSON = 'application/json, text/javascript, */*; q=0.8'
@@ -180,12 +180,12 @@ def post_login(cookie, tokens, username, password_enc, rsakey='', verifycode='',
         'logLoginType':'pc_loginBasic',
         'idc':'',
         'loginMerge':'true',
-        'username':username,
-        'password':password_enc,
+        'userName':username,
+        'password':'Ty13456!',
         #'verifycode':verifycode,
         'mem_pass':'on',
-        'rsakey':rsakey,
-        'crypttype':'12',
+        #'rsakey':rsakey,
+        #'crypttype':'12',
         'ppui_logintime':ppui_logintime,
         'callback':'parent.bd__pcbs__28g1kg',
         'dv': 'MDEwAAoA2wAKAk4AGwAAAF00AA0CAB3Ly25ZQRVUGl0PTgNcA1MAUA87ZDtLKlkqXTJAJAcCAATLy8vLDAIAI9OKjo6OFeWx8L75q-qn-Kf3pPSrn8Cf7479jvmW5IDwg_SQBwIABMvLy8sHAgAEy8vLywcCAATLy8vLBgIAKMvLy9DQ0NDQ0NDVkpKSkEBAQEUTExMQEBAQFUNDQ0GkpKSh9_f39RAXAgAIy8qBgYKljqkFAgAEy8vLwQECAAbLw8PNWugVAgAIy8vKkCqBv5wEAgAGycnLyfzKFgIAIuqe9cXr2eDT4tXi1uTQ59Hl0-DX4tPn3-bX7t7q3OXU4NMQAgAByxMCABnL3t7etsK2xvzT_IXwnrDSs9q-y-WG6YSrCAIACcvI9fWHh4cPCwgCAAnLz6Cg09PTWMYJAgAMy8--vs3Nzc3NQDIyCQIAJNPQCwoKCgoKCpnKyp7fkdaExYjXiNiL24Sw77DAodKh1rnLrw0CAB3Ly1gBGU0MQgVXFlsEWwtYCFdjPGMTcgFyBWoYfAwCACPTw8PDw1SO2pvVksCBzJPMnM-fwPSr9ITlluWS_Y_rm-if-wcCAATLy8vLDAIAI9Ofm5ubAsSQ0Z_YisuG2YbWhdWKvuG-zq_cr9i3xaHRotWxBwIABMvLy8sMAgAj05mdnZ0CpvKz_broqeS75LTnt-jcg9yszb7NutWnw7PAt9MMAgAj05-fn58-IXU0ej1vLmM8YzNgMG9bBFsrSjlKPVIgRDRHMFQNAgAby8tuLjhsLWMkdjd6JXoqeSl2Qh1CMUQmSyJW',
