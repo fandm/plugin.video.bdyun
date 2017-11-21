@@ -28,15 +28,15 @@ def main_menu():
         }]
     else:
         items = [{
-            'label': u'## 管理当前帐号: %s' %user_info['username'],
+            'label': u'## Аккаунт: %s' %user_info['username'],
             'path': plugin.url_for('accout_setting'),
             'is_playable': False,
         },{
-            'label': u'## 搜索文件(文件夹/视频/音乐)',
+            'label': u'## Поиск',
             'path': plugin.url_for('search'),
             'is_playable': False
         },{
-            'label': u'## 刷新',
+            'label': u'## Обновить',
             'path': plugin.url_for('refresh'),
             'is_playable': False
         }]
@@ -53,20 +53,20 @@ def main_menu():
                     items.extend(item_list)
                     break
                 except (KeyError, TypeError, UnicodeError):
-                    dialog.ok('Error', u'请求参数错误', u'请点击登出再重新登录')
-                    items.extend([{'label': u'登出 && 重新登录', 'path': plugin.url_for('clear_cache')}])
+                    dialog.ok('Error', u'Ошибка запроса параметра', u'Войдите снова')
+                    items.extend([{'label': u'Выйти и снова войти', 'path': plugin.url_for('clear_cache')}])
                     break
             else:
                 cookie,tokens = get_auth.run(user_info['username'], user_info['password'])
                 if tokens['bdstoken']:
                     save_user_info(user_info['username'], user_info['password'], cookie, tokens)
                 else:
-                    items.extend([{'label': u'重新登录', 'path': plugin.url_for('relogin')}])
+                    items.extend([{'label': u'Войти снова', 'path': plugin.url_for('relogin')}])
                     break
 
             if loopTime == 4:
-                dialog.ok('Error', u'未知错误', u'请重新登录')
-                items.extend([{'label': u'重新登录', 'path': plugin.url_for('relogin')}])
+                dialog.ok('Error', u'Неизвестная ошибка', u'Повторите попытку')
+                items.extend([{'label': u'Войти снова', 'path': plugin.url_for('relogin')}])
 
     return plugin.finish(items, update_listing=True)
 
@@ -74,19 +74,19 @@ def main_menu():
 @plugin.route('/login_dialog/')
 @plugin.route('/login_dialog/', name='relogin')
 def login_dialog():
-    username = dialog.input(u'用户名:', type=xbmcgui.INPUT_ALPHANUM)
-    password = dialog.input(u'密码:', type=xbmcgui.INPUT_ALPHANUM, option=xbmcgui.ALPHANUM_HIDE_INPUT)
+    username = dialog.input(u'Логин:', type=xbmcgui.INPUT_ALPHANUM)
+    password = dialog.input(u'Пароль:', type=xbmcgui.INPUT_ALPHANUM, option=xbmcgui.ALPHANUM_HIDE_INPUT)
     if username and password:
         cookie,tokens = get_auth.run(username,password)
         if tokens:
             save_user_info(username,password,cookie,tokens)
             homemenu = plugin.get_storage('homemenu')
             homemenu.clear()
-            dialog.ok('',u'登录成功', u'点击返回首页并耐心等待')
-            items = [{'label': u'<< 返回首页', 'path': plugin.url_for('main_menu')}]
+            dialog.ok('',u'Успешный вход', u'Вернитесь на главную страницу и ждите...')
+            items = [{'label': u'<< Вернуться на главную', 'path': plugin.url_for('main_menu')}]
             return plugin.finish(items, update_listing=True)
     else:
-        dialog.ok('Error',u'用户名或密码不能为空')
+        dialog.ok('Error',u'Логин и Пароль не могут быть пустыми')
     return None
 
 
@@ -94,18 +94,18 @@ def login_dialog():
 def accout_setting():
     user_info = get_user_info()
     items = [{
-    'label': u'<< 返回首页',
+    'label': u'<< Вернуться на главную',
     'path': plugin.url_for('main_menu')
     },{
-    'label': u'登出和清除缓存',
+    'label': u'Выйти и очистить кеш',
     'path': plugin.url_for('clear_cache'),
     'is_playable': False
     },{
-    'label': u'重新登录/切换帐号',
+    'label': u'Войти снова / Войти',
     'path': plugin.url_for('relogin'),
     'is_playable': False
     },{
-    'label': u'插件设置',
+    'label': u'Настройки',
     'path': plugin.url_for('setting'),
     'is_playable': False
     }]
@@ -128,7 +128,7 @@ def clear_cache():
     info.clear()
     homemenu.clear()
     pcs_info.clear()
-    dialog.notification('', u'清除完毕', xbmcgui.NOTIFICATION_INFO, 3000)
+    dialog.notification('', u'Очищено', xbmcgui.NOTIFICATION_INFO, 3000)
     xbmc.executebuiltin('Container.Refresh')
     return
 
@@ -138,7 +138,7 @@ def search():
     user_info = get_user_info()
     user_cookie = user_info['cookie']
     user_tokens = user_info['tokens']
-    key = dialog.input(heading=u'输入文件名/关键词')
+    key = dialog.input(heading=u'Имя файла / Ключевое слово')
     if key:
         s = pcs.search(user_cookie, user_tokens, key)
         items = []
@@ -177,7 +177,7 @@ def search():
             if items:
                 return plugin.finish(items)
             else:
-                dialog.ok('',u'搜素的文件不属于文件夹、视频或音频')
+                dialog.ok('',u'Ничего не найдено')
 
         elif s['list']:
             for result in s['list']:
@@ -214,10 +214,10 @@ def search():
             if items:
                 return plugin.finish(items)
             else:
-                dialog.ok('',u'搜素的文件不属于文件夹、视频或音频')
+                dialog.ok('',u'Ничего не найдено')
 
         else:
-            dialog.ok('',u'没有找到文件')
+            dialog.ok('',u'Ничего не найдено')
             return None
 
     return
@@ -236,17 +236,17 @@ def directory(path):
     previous_path = os.path.dirname(path).encode('utf-8')
     if previous_path == '/':
         item_list.insert(0,{
-                'label': u'<< 返回首页',
+                'label': u'<< Вернуться на главную',
                 'path': plugin.url_for('main_menu')
             })
     else:
         item_list.insert(0,{
-                'label': u'<< 返回上一目录',
+                'label': u'<< Назад',
                 'path': plugin.url_for('directory', path=previous_path),
             })
 
     item_list.insert(0,{
-                'label': u'## 当前目录: %s' % path,
+                'label': u'## Текущий каталог: %s' % path,
                 'path': plugin.url_for('refresh')
             })
     return plugin.finish(item_list, update_listing=True)
@@ -263,7 +263,7 @@ def refresh():
 def quality(filepath):
     if plugin.get_setting('show_stream_type', bool):
         stream_type = ['M3U8_AUTO_720', 'NONE']
-        choice = dialog.select(u'请选择画质', [u'流畅',u'原画'])
+        choice = dialog.select(u'Выберите качество', [u'Гладко',u'Оригинал'])
         if choice < 0:
             return
         elif choice == 0:
@@ -307,7 +307,7 @@ def menu_cache(cookie, tokens):
     if pcs_files:
         item_list = MakeList(pcs_files)
     else:
-        return [{'label': u'请点击一下「刷新」', 'path': plugin.url_for('refresh')}]
+        return [{'label': u'Нажмите обновить', 'path': plugin.url_for('refresh')}]
     homemenu = plugin.get_storage('homemenu', TTL=60)
     homemenu['item_list'] = item_list
     return item_list
@@ -332,9 +332,9 @@ def save_user_info(username, password, cookie, tokens):
 def MakeList(pcs_files):
     item_list = []
     ContextMenu = [
-        ('搜索', actions.background(plugin.url_for('search'))),
-        ('刷新', actions.background(plugin.url_for('refresh'))),
-        ('登出', actions.background(plugin.url_for('clear_cache'))),
+        ('Поиск', actions.background(plugin.url_for('search'))),
+        ('Обновить', actions.background(plugin.url_for('refresh'))),
+        ('Очистить кеш', actions.background(plugin.url_for('clear_cache'))),
     ]
     for result in pcs_files:
         if result['isdir'] == 1:
@@ -397,14 +397,14 @@ def playlist_path(pcs_file_path, stream):
             tmpFile.write(bytearray(playlist_data, 'utf-8'))
             return filepath
         else:
-            dialog.notification('', u'无法打开视频', xbmcgui.NOTIFICATION_INFO, 4000)
+            dialog.notification('', u'Не удалось открыть видео', xbmcgui.NOTIFICATION_INFO, 4000)
             return None
     else:
         url = pcs.stream_download(user_cookie, user_tokens, pcs_file_path)
         if url:
             return url
         else:
-            dialog.notification('', u'无法打开原画，请尝试流畅模式', xbmcgui.NOTIFICATION_INFO, 4000)
+            dialog.notification('', u'Не удаётся использовать режим Оригинал, попробуйте режим Гладко', xbmcgui.NOTIFICATION_INFO, 4000)
             return None
 
 
