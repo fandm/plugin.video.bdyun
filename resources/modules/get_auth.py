@@ -64,6 +64,7 @@ def run(username,password):
         win = VcodeWindow(cookie, tokens, vcodetype, codeString, vcode_path)
         win.doModal()
         codeString = win.codeString
+        dialog.ok('Error', codeString)
 
         verifycode = dialog.input(heading=u'Код')
         if verifycode:
