@@ -5,7 +5,7 @@
 # in http://www.gnu.org/licenses/gpl-3.0.html
 
 
-import time, json, base64, re, random, urlparse, os
+import time, json, base64, re, random, urlparse, os, xbmcgui
 import requests
 import rsa
 from resources.modules import utils
