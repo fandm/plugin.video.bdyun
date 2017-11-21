@@ -10,6 +10,8 @@ import requests
 import rsa
 from resources.modules import utils
 
+dialog = xbmcgui.Dialog()
+
 
 #some base url and information needed by service
 timestamp = str(int(time.time()*1000))
