@@ -162,21 +162,24 @@ def post_login(cookie, tokens, username, password_enc, rsakey='', verifycode='',
         headers_merged[key] = headers[key]
 
     data={
-        'staticpage':'http://yun.baidu.com/res/static/thirdparty/pass_v3_jump.html',
+        'staticPage':'https://passport.baidu.com/static/passpc-account/html/v3Jump.html',
+        'gid':'EB407CE-1031-4089-868D-AF4587B04EBA',
+        'detect':'1',
         'charset':'UTF-8',
         'token':tokens['token'],
         'tpl':'netdisk',
-        'subpro':'netdisk_web',
+        'subpro':'',
         'apiver':'v3',
         'tt': timestamp,
-        'codestring':codeString,
-        'safeflg':'0',
-        'u':'http://yun.baidu.com/disk/home',
+        'codeString':codeString,
+        'safeFlag':'0',
+        'u':'https://passport.baidu.com/',
         'isPhone':'',
         'quick_user':'0',
         'logintype':'basicLogin',
-        'logLoginType':'pc_loginBasic&idc=',
-        'loginmerge':'true',
+        'logLoginType':'pc_loginBasic',
+        'idc':'',
+        'loginMerge':'true',
         'username':username,
         'password':password_enc,
         'verifycode':verifycode,
@@ -190,7 +193,6 @@ def post_login(cookie, tokens, username, password_enc, rsakey='', verifycode='',
         }
     req = requests.post(url, headers=headers_merged, cookies=cookie, data=data, timeout=50, verify=False)
     content = req.text
-    dialog.ok('Error', content)
     if content:
         match = re.search('"(err_no[^"]+)"', content)
         if not match:
